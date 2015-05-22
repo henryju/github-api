@@ -79,4 +79,25 @@ public class GHIssueComment extends GHObject {
     public URL getHtmlUrl() {
         return null;
     }
+    
+    /**
+     * Updates the body of the issue comment.
+     */
+    public void update(String body) throws IOException {
+        GHIssueComment r = new Requester(owner.root)
+                .with("body", body)
+                .method("PATCH").to(getApiTail(), GHIssueComment.class);
+        this.body = body;
+    }
+
+    /**
+     * Deletes this issue comment.
+     */
+    public void delete() throws IOException {
+        new Requester(owner.root).method("DELETE").to(getApiTail());
+    }
+    
+    private String getApiTail() {
+        return owner.getIssuesApiRoute() + "/comments/" + id;
+    }
 }
